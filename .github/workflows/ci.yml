@@ -1,0 +1,47 @@
+name: conformance
+
+# protocol-tests' FIRST CI (Group 11 deferred it to Group 12 Commit 7). It closes the EXTERNAL
+# conformance loop: a freshly-installed, pinned, PUBLIC cephios-core runs its §17.3 conformance
+# runner against THIS repository's published v1.0/ vectors. A green run demonstrates end-to-end
+# that the reference SDK conforms to the published suite (and that cephios-core's vendored vector
+# copy == this published suite — the C3 SHA-pin, now shown live, not just asserted by hash).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  conformance:
+    name: §17.3 conformance (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    # LIMITED matrix — Linux only, Python 3.10–3.13. Cross-OS ({ubuntu,macos,windows}) is already
+    # proven in cephios-core's OWN §B; the external loop verifies install-and-conform across the
+    # supported Python versions and need not duplicate the OS grid here.
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.10', '3.11', '3.12', '3.13']
+    steps:
+      - name: checkout
+        uses: actions/checkout@v5  # node24
+
+      - name: set up python
+        uses: actions/setup-python@v6  # node24
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: install pinned cephios-core
+        # cephios-core is PUBLIC — a plain pip install of the pinned SHA, no token / deploy key.
+        # This network clone is the new failure surface vs cephios-core's own CI; the immutable
+        # SHA + public repo de-risk it (first-CI install territory).
+        run: pip install -r runners/python/requirements.txt
+
+      - name: run §17.3 conformance gate against the published v1.0 vectors
+        # OS-agnostic invocation (python, no shell-ism); the shim resolves v1.0/ relative to
+        # itself. The job fails iff cephios-core's §17.3 gate exits non-zero.
+        run: python runners/python/run.py
