@@ -2,7 +2,7 @@
 #
 # The runner is a thin shim (see run.py): it installs this pinned cephios-core and invokes its
 # §17.3 conformance runner (`python -m cephios_core.conformance <vectors>`) against the published
-# v1.0/ vectors in this repository. cephios-core is PUBLIC, so no token / deploy key is needed.
+# v1.0/ vectors in this repository.
 #
-# cephios-core Group 12 C6 close. Swap to `cephios-core==X.Y.Z` once published to PyPI.
-cephios-core @ git+https://github.com/cephios/cephios-core@e9da602
+# Pinned to the published PyPI release (cephios-core is public on PyPI; no token / deploy key needed).
+cephios-core==0.1.0
