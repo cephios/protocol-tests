@@ -1,0 +1,14 @@
+{
+  "name": "cephios-protocol-tests-ts-runner",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Reference TypeScript conformance runner (thin shim) for the Cephios Protocol v1.0 suite.",
+  "//": "PINNED REFERENCE SDK: @cephios/core is pinned to github:cephios/cephios-core-ts#620d6a4 (the C7b prepare-hook commit), which builds dist/ on install via the prepare hook (the SDK gitignores dist/ and ships only built output). @cephios/core is not yet published to npm (post-close Founder-operational). Swap to the published npm `@cephios/core@0.1.0` once published, mirroring the Python git->PyPI swap (MVP_MAP.md §7 v2.22 forward-flag 1). See ./README.md.",
+  "scripts": {
+    "conformance": "node run.mjs"
+  },
+  "dependencies": {
+    "@cephios/core": "github:cephios/cephios-core-ts#620d6a4"
+  }
+}

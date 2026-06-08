@@ -1,2 +1,8 @@
 # macOS Finder metadata — local cruft, never part of the published vector suite.
 .DS_Store
+
+# TypeScript conformance-runner install artifacts — the runner git-installs @cephios/core on demand
+# (the pin lives in runners/typescript/package.json); node_modules and any lockfile are regenerated
+# by `npm install` / CI and are never committed.
+runners/typescript/node_modules/
+runners/typescript/package-lock.json

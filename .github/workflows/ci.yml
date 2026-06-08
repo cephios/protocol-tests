@@ -45,3 +45,34 @@ jobs:
         # OS-agnostic invocation (python, no shell-ism); the shim resolves v1.0/ relative to
         # itself. The job fails iff cephios-core's §17.3 gate exits non-zero.
         run: python runners/python/run.py
+
+  conformance-ts:
+    name: §17.3 conformance (node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    # LIMITED matrix — Linux only, Node 22 + 24. Cross-OS ({ubuntu,macos,windows}) is already
+    # proven in @cephios/core's OWN §B; the external loop verifies install-and-conform across the
+    # supported Node versions and need not duplicate the OS grid here (mirrors the Python job).
+    # Action versions match cephios-core-ts's own (green) CI — the TS-toolchain source of truth.
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['22', '24']
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+
+      - name: set up node
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: install the git-pinned @cephios/core (builds dist/ via the SDK's prepare hook)
+        # @cephios/core is pinned to github:cephios/cephios-core-ts#620d6a4 (not yet on npm — see
+        # runners/typescript/package.json). The git install clones the pinned SHA and runs the SDK's
+        # prepare hook to build dist/; needs git + network, both present on GitHub Actions.
+        run: npm install --prefix runners/typescript
+
+      - name: run §17.3 conformance gate against the published v1.0 vectors
+        # The shim imports @cephios/core's own §17.3 runner and points it at this repo's v1.0/
+        # (CWD-independent). The job fails iff that gate exits non-zero.
+        run: node runners/typescript/run.mjs
