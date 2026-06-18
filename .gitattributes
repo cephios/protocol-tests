@@ -1,0 +1,6 @@
+# v1.0 conformance vectors are SHA-256-pinned by downstream consumers
+# (cephios-core tests/vectors/UPSTREAM.json + test_vector_pin.py; @cephios/core
+# likewise). Mark the vector tree -text so git performs NO end-of-line conversion
+# on any OS — git-for-Windows autocrlf never rewrites LF->CRLF — keeping the bytes,
+# and therefore the SHA-256 pin, byte-identical cross-OS (G12-D5 item c).
+v1.0/** -text

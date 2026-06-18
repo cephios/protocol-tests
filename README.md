@@ -47,7 +47,8 @@ v1.0/
 ├── error_taxonomy.json           # typed CephiosError category/code/status (§14)
 ├── envelope_versioning.json      # version/alg_id rejection (§6.5 steps 3-4)
 ├── session_lifecycle.json        # open/close shapes (§9)
-└── control_plane_erasure.json    # DELETE /v1/subjects/{id} shapes (§10.5)
+├── control_plane_erasure.json    # DELETE /v1/subjects/{id} shapes (§10.5)
+└── file_roundtrip.json           # chunk(file)->batches->reassemble byte-identical (§9.1/§7.5) — client-side, Python-generated
 ```
 
 Each file is a JSON array of `CONTRACT_SPEC.md` §17.2 vector objects
